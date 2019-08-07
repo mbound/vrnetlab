@@ -45,7 +45,7 @@ class VMX_vcp(vrnetlab.VM):
                        "type=1,manufacturer=Juniper,product=VM-vcp_vmx2-161-re-0,version=0.1.0"]
         # add metadata image if it exists
         if os.path.exists("/vmx/metadata-usb-re.img"):
-            self.qemu_args.extend(["-usb", "-usbdevice", "disk:format=raw:/vmx/metadata-usb-re.img"])
+            self.qemu_args.extend(["-drive", "id=metadata,file=/vmx/metadata-usb-re.img,if=none,format=raw", "-usb", "-device", "usb-storage,id=metadata,drive=metadata"])
 
 
 
@@ -183,7 +183,7 @@ class VMX_vfpc(vrnetlab.VM):
         self.qemu_args.extend(["-cpu", "SandyBridge", "-M", "pc", "-smp", "3"])
         # add metadata image if it exists
         if os.path.exists("/vmx/metadata-usb-fpc0.img"):
-            self.qemu_args.extend(["-usb", "-usbdevice", "disk:format=raw:/vmx/metadata-usb-fpc0.img"])
+            self.qemu_args.extend(["-drive", "id=metadatafpc0,file=/vmx/metadata-usb-fpc0.img,if=none,format=raw", "-usb", "-device", "usb-storage,id=metadatafpc0,drive=metadatafpc0"])
 
 
 
@@ -198,7 +198,7 @@ class VMX_vfpc(vrnetlab.VM):
         res.extend(["-netdev",
                     "tap,ifname=vfpc-int,id=vfpc-int,script=no,downscript=no"])
 
-        if self.version in ('15.1F6.9', '16.1R2.11', '17.2R1.13'):
+        if self.version in ('15.1F6.9', '16.1R2.11', '17.2R1.13', '18.4R2.7'):
             # dummy interface for some vMX versions - not sure why vFPC wants
             # it but without it we get a misalignment
             res.extend(["-device", "virtio-net-pci,netdev=dummy,mac=%s" %
@@ -206,7 +206,6 @@ class VMX_vfpc(vrnetlab.VM):
             res.extend(["-netdev", "tap,ifname=vfpc-dummy,id=dummy,script=no,downscript=no"])
 
         return res
-
 
 
     def start(self):
