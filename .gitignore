@@ -1,0 +1,6 @@
+/vmx/cidfile
+/vmx/*.tgz
+/vmx/docker/healthcheck.py
+/vmx/docker/vrnetlab.py
+/vmx/docker/vmx*
+/vmx/docker/vmx/*
